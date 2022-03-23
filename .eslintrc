@@ -1,0 +1,19 @@
+{
+  "extends": "airbnb-base",
+  "rules": {
+    "react-hooks/exhaustive-deps":  "off",
+    "import/no-unresolved": [
+      2, 
+      { "caseSensitive": false }
+   ],
+    "no-console": "off",
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": [
+          "_id"
+        ]
+      }
+    ]
+  }
+}
