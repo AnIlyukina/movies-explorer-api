@@ -4,12 +4,16 @@ const {
   getMovies, createMovie, deleteMovie,
 } = require('../controllers/movie');
 
+const {
+  validateMovie, validateId,
+} = require('../middlewares/validation');
+
 const moviesRoutes = express.Router();
 
 moviesRoutes.get('/', getMovies);
 
-moviesRoutes.post('/', express.json(), createMovie);
+moviesRoutes.post('/', express.json(), validateMovie, createMovie);
 
-moviesRoutes.delete('/:id', deleteMovie);
+moviesRoutes.delete('/:id', validateId, deleteMovie);
 
 exports.moviesRoutes = moviesRoutes;

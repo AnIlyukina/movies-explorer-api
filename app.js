@@ -2,6 +2,12 @@ const express = require('express');
 
 const mongoose = require('mongoose');
 
+const { errors } = require('celebrate');
+
+const errorHandler = require('./middlewares/errorHandler');
+
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+
 const { routes } = require('./routes/index');
 
 const { PORT = 3000 } = process.env;
@@ -17,7 +23,13 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(requestLogger);
+
 app.use(routes);
+
+app.use(errorLogger);
+app.use(errors());
+app.use(errorHandler);
 
 async function main() {
   await mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {

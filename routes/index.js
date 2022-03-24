@@ -2,6 +2,8 @@ const express = require('express');
 const auth = require('../middlewares/auth');
 const { createUser, login } = require('../controllers/user');
 
+const { validateLogin, validateUser } = require('../middlewares/validation');
+
 const { usersRoutes } = require('./users');
 const { moviesRoutes } = require('./movies');
 
@@ -9,8 +11,8 @@ const { NotFoundError } = require('../errors');
 
 const routes = express.Router();
 
-routes.post('/signup', createUser);
-routes.post('/signin', login);
+routes.post('/signup', validateUser, createUser);
+routes.post('/signin', validateLogin, login);
 
 routes.use(auth);
 
