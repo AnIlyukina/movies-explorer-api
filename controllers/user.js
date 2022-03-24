@@ -1,8 +1,61 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 const {
-  NotFoundError, BadRequestError,
+  NotFoundError, BadRequestError, ConflictRequestError, UnAuthtorizedError,
 } = require('../errors');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+const MONGO_DUPLICATE_ERROR_CODE = 11000;
+const SOLT_ROUND = 10;
+
 const User = require('../models/user');
+
+exports.createUser = async (req, res, next) => {
+  try {
+    const { body } = req;
+
+    if (!body.email || !body.password) {
+      throw new BadRequestError('Не верный email или пароль');
+    }
+
+    const salt = await bcrypt.genSalt(SOLT_ROUND);
+    body.password = await bcrypt.hash(body.password, salt);
+    const user = await User.create(body);
+
+    res.status(201).send({
+      data: {
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (err) {
+    if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
+      next(new ConflictRequestError('Такой пользователь уже существует'));
+    }
+    if (err.name === 'ValidationError') {
+      next(new BadRequestError('Переданы невалидные данные'));
+    }
+    next(err);
+  }
+};
+
+exports.login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const userEmail = await User.findUserByCredentials(email, password);
+    if (userEmail) {
+      const token = jwt.sign(
+        { _id: userEmail._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        { expiresIn: '7d' },
+      );
+      res.send({ token });
+    }
+  } catch (err) {
+    next(new UnAuthtorizedError('Пользователь не авторизован'));
+  }
+};
 
 exports.getMyUser = async (req, res, next) => {
   try {

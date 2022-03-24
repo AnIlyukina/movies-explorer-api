@@ -52,16 +52,16 @@ const movieSchema = new mongoose.Schema({
       message: 'Некорректный URL',
     },
   },
-  // owner: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'User',
-  //   required: true,
-  // },
-  // movieId: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'Movie',
-  //   required: true,
-  // },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  movieId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'MovieId',
+    required: true,
+  },
   nameRU: {
     type: String,
     require: true,

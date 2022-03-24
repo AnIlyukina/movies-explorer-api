@@ -10,6 +10,13 @@ const app = express();
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  req.movieId = {
+    _id: '623b24daee48975625c07756',
+  };
+  next();
+});
+
 app.use(routes);
 
 async function main() {

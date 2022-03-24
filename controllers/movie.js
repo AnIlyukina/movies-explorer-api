@@ -24,8 +24,8 @@ exports.createMovie = async (req, res, next) => {
       image: req.body.image,
       trailerLink: req.body.trailerLink,
       thumbnail: req.body.thumbnail,
-      // owner:
-      // movieId:
+      owner: req.user._id,
+      movieId: req.movieId._id,
       nameRU: req.body.nameRU,
       nameEN: req.body.nameEN,
     });
@@ -40,17 +40,17 @@ exports.createMovie = async (req, res, next) => {
 
 exports.deleteMovie = async (req, res, next) => {
   try {
-    const { movieId } = req.params;
+    const movieIdUser = req.params.id;
     const userId = req.user._id;
 
-    const movie = await Movie.findById(movieId);
+    const movie = await Movie.findById(movieIdUser);
     if (!movie) {
       throw new ForbiddenError('Пользователь не найден');
     }
     if (!movie.owner.equals(userId)) {
       throw new ForbiddenError('Данный фильм нельзя удалить');
     }
-    const isDeletedMovie = await Movie.findByIdAndDelete(movieId);
+    const isDeletedMovie = await Movie.findByIdAndDelete(movieIdUser);
     if (isDeletedMovie) {
       res.status(200).send(movie);
     } else {
