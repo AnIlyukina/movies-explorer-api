@@ -50,10 +50,27 @@ exports.login = async (req, res, next) => {
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' },
       );
-      res.send({ token });
+      res
+        .cookie('token', token, {
+          maxAge: 3600000 * 24 * 7,
+          httpOnly: true,
+        })
+        .status(200).send({ token });
     }
   } catch (err) {
     next(new UnAuthtorizedError('Пользователь не авторизован'));
+  }
+};
+
+exports.signout = async (req, res, next) => {
+  try {
+    const { token } = req.cookies;
+    if (!token) {
+      throw new UnAuthtorizedError('Пользователь не авторизован');
+    }
+    res.clearCookie('token').send({ message: 'Успешно!' });
+  } catch (err) {
+    next(err);
   }
 };
 

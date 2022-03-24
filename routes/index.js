@@ -1,6 +1,6 @@
 const express = require('express');
 const auth = require('../middlewares/auth');
-const { createUser, login } = require('../controllers/user');
+const { createUser, login, signout } = require('../controllers/user');
 
 const { validateLogin, validateUser } = require('../middlewares/validation');
 
@@ -18,6 +18,7 @@ routes.use(auth);
 
 routes.use('/users', usersRoutes);
 routes.use('/movies', moviesRoutes);
+routes.post('/logout', signout);
 
 routes.use((req, res, next) => {
   next(new NotFoundError(`Aдреса ${req.path} не существует`));
