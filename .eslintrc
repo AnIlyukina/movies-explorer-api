@@ -1,12 +1,9 @@
 {
   "extends": "airbnb-base",
+  "import/no-import-module-exports": ["error", {
+    "exceptions": ["**/*/some-file.js"]
+  }],
   "rules": {
-    "react-hooks/exhaustive-deps":  "off",
-    "import/no-unresolved": [
-      2, 
-      { "caseSensitive": false }
-   ],
-    "no-console": "off",
     "func-names": "off",
     "no-underscore-dangle": [
       "error",

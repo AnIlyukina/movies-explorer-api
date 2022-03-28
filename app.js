@@ -6,13 +6,17 @@ const cookieParser = require('cookie-parser');
 
 const { errors } = require('celebrate');
 
+const helmet = require('helmet');
+
+const rateLimiter = require('./middlewares/rateLimit');
+
 const errorHandler = require('./middlewares/errorHandler');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { routes } = require('./routes/index');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, MONGOBD_ADDRESS, NODE_ENV } = process.env;
 
 const app = express();
 
@@ -20,14 +24,11 @@ app.use(cookieParser());
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.movieId = {
-    _id: '623b24daee48975625c07756',
-  };
-  next();
-});
-
 app.use(requestLogger);
+
+app.use(helmet());
+
+app.use(rateLimiter);
 
 app.use(routes);
 
@@ -36,13 +37,13 @@ app.use(errors());
 app.use(errorHandler);
 
 async function main() {
-  await mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+  await mongoose.connect(`${NODE_ENV === 'production' ? MONGOBD_ADDRESS : 'mongodb://localhost:27017/bitfilmsdb'}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
 
   await app.listen(PORT);
-  console.log('сервер запущен');
+  console.log(`сервер запущен на ${PORT}`);
 }
 
 main();

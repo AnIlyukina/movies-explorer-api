@@ -58,7 +58,7 @@ exports.login = async (req, res, next) => {
         .status(200).send({ token });
     }
   } catch (err) {
-    next(new UnAuthtorizedError('Пользователь не авторизован'));
+    next(new UnAuthtorizedError('Неправильная почта или пароль'));
   }
 };
 
@@ -76,6 +76,7 @@ exports.signout = async (req, res, next) => {
 
 exports.getMyUser = async (req, res, next) => {
   try {
+    console.log(req);
     const { _id } = req.user;
     const currentUser = await User.findById(_id);
     if (!currentUser) {
@@ -83,9 +84,6 @@ exports.getMyUser = async (req, res, next) => {
     }
     res.send(currentUser);
   } catch (err) {
-    if (err.name === 'CastError') {
-      next(new BadRequestError('Переданы невалидные данные'));
-    }
     next(err);
   }
 };
@@ -102,6 +100,8 @@ exports.updateMyUserInfo = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequestError('Переданы невалидные данные'));
+    } else if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
+      next(new ConflictRequestError('Такой пользователь уже существует'));
     } else {
       next(err);
     }

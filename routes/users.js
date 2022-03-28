@@ -10,6 +10,6 @@ const usersRoutes = express.Router();
 
 usersRoutes.get('/me', getMyUser);
 
-usersRoutes.put('/me', validateUserUpdate, updateMyUserInfo);
+usersRoutes.patch('/me', validateUserUpdate, updateMyUserInfo);
 
 exports.usersRoutes = usersRoutes;

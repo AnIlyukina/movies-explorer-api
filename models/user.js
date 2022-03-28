@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     validate: {
       validator(email) {
-        return validator.isURL(email);
+        return validator.isEmail(email);
       },
       message: 'Некорректный URL',
     },
@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: [8, 'Минимальная длина пароля 8 символов'],
+    select: false
   },
 });
 

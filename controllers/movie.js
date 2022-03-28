@@ -25,7 +25,7 @@ exports.createMovie = async (req, res, next) => {
       trailerLink: req.body.trailerLink,
       thumbnail: req.body.thumbnail,
       owner: req.user._id,
-      movieId: req.movieId._id,
+      movieId: req.body.movieId,
       nameRU: req.body.nameRU,
       nameEN: req.body.nameEN,
     });
@@ -33,8 +33,9 @@ exports.createMovie = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequestError('Переданы невалидные данные'));
+    } else {
+      next(err);
     }
-    next(err);
   }
 };
 
@@ -45,7 +46,7 @@ exports.deleteMovie = async (req, res, next) => {
 
     const movie = await Movie.findById(movieIdUser);
     if (!movie) {
-      throw new ForbiddenError('Пользователь не найден');
+      throw new ForbiddenError('Данный фильм не найден');
     }
     if (!movie.owner.equals(userId)) {
       throw new ForbiddenError('Данный фильм нельзя удалить');
@@ -59,7 +60,8 @@ exports.deleteMovie = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new BadRequestError('Переданы невалидные данные'));
+    } else {
+      next(err);
     }
-    next(err);
   }
 };
