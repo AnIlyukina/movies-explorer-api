@@ -1,0 +1,17 @@
+{
+  "extends": "airbnb-base",
+  "import/no-import-module-exports": ["error", {
+    "exceptions": ["**/*/some-file.js"]
+  }],
+  "rules": {
+    "func-names": "off",
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": [
+          "_id"
+        ]
+      }
+    ]
+  }
+}
