@@ -6,7 +6,8 @@ const Movie = require('../models/movie');
 
 exports.getMovies = async (req, res, next) => {
   try {
-    const movies = await Movie.find({});
+    const { _id } = req.user;
+    const movies = await Movie.find({ owner: _id });
     res.status(200).send(movies);
   } catch (err) {
     next(err);
