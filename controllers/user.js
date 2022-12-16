@@ -86,7 +86,7 @@ exports.getMyUser = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+}
 
 exports.updateMyUserInfo = async (req, res, next) => {
   const { name, email } = req.body;
