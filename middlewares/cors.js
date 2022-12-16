@@ -1,14 +1,8 @@
 const allowedCors = [
-  'https://moviesil.nomoredomains.work',
-  'https://moviesil.nomoredomains.work/',
-  'http://localhost:3001',
-  'http://localhost:3001/',
-  'http://localhost:3002',
-  'http://localhost:3002/',
-  'http://localhost:3003',
-  'http://localhost:3003/',
-  'http://localhost:3004',
-  'http://localhost:3004/',
+  "https://movies-ilyukina.ru",
+  "https://movies-ilyukina.ru",
+  "http://localhost:3001",
+  "http://localhost:3001/",
 ];
 
 const ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
