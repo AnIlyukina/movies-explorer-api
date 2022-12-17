@@ -1,6 +1,6 @@
 const allowedCors = [
-  "https://movies-ilyukina.ru",
-  "https://movies-ilyukina.ru",
+  "http://diplom.ilyukina.ru",
+  "https://diplom.ilyukina.ru",
   "http://localhost:3001",
   "http://localhost:3001/",
 ];
